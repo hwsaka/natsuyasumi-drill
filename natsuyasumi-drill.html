@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>なつやすみ まいにちドリル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EC;
+    --paper-line:#E4DCC6;
+    --ink:#2C3B4E;
+    --ink-soft:#5B6B7C;
+    --kokugo:#D6534A;
+    --kokugo-soft:#F7DEDB;
+    --sansu:#2A7F8E;
+    --sansu-soft:#DCEEEF;
+    --stamp-red:#C8352C;
+    --paper-fold:#F0E9D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 33px, var(--paper-line) 34px),
+      var(--paper);
+    font-family:"Zen Maru Gothic", sans-serif;
+    color:var(--ink);
+    padding-bottom:60px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:20px 18px 40px;}
+
+  header{
+    text-align:center;
+    padding:18px 0 8px;
+  }
+  header h1{
+    font-family:"Yomogi", cursive;
+    font-size:2.3em;
+    margin:0;
+    color:var(--ink);
+    letter-spacing:.02em;
+  }
+  header .sub{
+    font-size:.9em;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+
+  .tabs{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    margin:14px 0;
+    flex-wrap:wrap;
+  }
+  .tab-group{display:flex;gap:8px;background:var(--paper-fold);padding:6px;border-radius:14px;}
+  .tab-btn{
+    border:none;
+    padding:9px 18px;
+    border-radius:10px;
+    font-family:"Zen Maru Gothic";
+    font-weight:700;
+    font-size:.98em;
+    cursor:pointer;
+    background:transparent;
+    color:var(--ink-soft);
+    transition:all .15s;
+  }
+  .tab-btn.active.grade{background:var(--ink);color:#fff;}
+  .tab-btn.active.kokugo{background:var(--kokugo);color:#fff;}
+  .tab-btn.active.sansu{background:var(--sansu);color:#fff;}
+  .tab-btn:hover:not(.active){background:#ffffff88;}
+
+  .date-row{
+    text-align:center;
+    font-size:.92em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .date-row input[type=date]{
+    font-family:"Zen Maru Gothic";
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:4px 8px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .today-btn{
+    border:1px solid var(--paper-line);
+    background:#fff;
+    border-radius:8px;
+    padding:4px 10px;
+    font-family:"Zen Maru Gothic";
+    font-size:.85em;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+
+  .stats{
+    text-align:center;
+    font-size:.85em;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+
+  .qlist{display:flex;flex-direction:column;gap:12px;}
+  .qcard{
+    background:#fff;
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 2px 0 var(--paper-line);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    border-left:6px solid var(--subject-color, var(--sansu));
+  }
+  .qcard-top{display:flex;align-items:flex-start;gap:12px;}
+  .qnum{
+    font-family:"Yomogi";
+    font-size:1.3em;
+    width:28px;
+    text-align:center;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+  .qbody{flex:1;min-width:0;}
+  .qlabel{
+    display:inline-block;
+    font-size:.72em;
+    font-weight:700;
+    color:#fff;
+    background:var(--subject-color, var(--sansu));
+    padding:1px 8px;
+    border-radius:6px;
+    margin-bottom:5px;
+  }
+  .qprompt{font-size:1.05em;line-height:1.5;}
+  .qprompt b{color:var(--subject-color, var(--sansu));}
+  .mc-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-left:40px;
+  }
+  .opt-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    border:2px solid var(--paper-line);
+    background:#FFFDF6;
+    border-radius:10px;
+    padding:8px 12px;
+    font-family:"Zen Maru Gothic";
+    font-size:1em;
+    font-weight:700;
+    cursor:pointer;
+    color:var(--ink);
+    transition:all .12s;
+  }
+  .opt-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:20px;height:20px;
+    border-radius:50%;
+    background:var(--paper-fold);
+    font-size:.8em;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+  .opt-btn:hover:not([disabled]){border-color:var(--subject-color, var(--sansu));}
+  .opt-btn.selected{border-color:var(--subject-color, var(--sansu));background:var(--subject-color, var(--sansu));color:#fff;}
+  .opt-btn.selected .opt-num{background:rgba(255,255,255,.35);color:#fff;}
+  .opt-btn.correct{border-color:var(--stamp-red);background:#FFF3F1;color:var(--stamp-red);}
+  .opt-btn.wrong-selected{border-color:#9AA5AF;background:#F3F3F1;color:#7a848c;text-decoration:line-through;}
+  .opt-btn[disabled]{cursor:default;}
+  .mark{font-size:1.6em;font-weight:900;width:34px;text-align:center;font-family:"Yomogi";flex-shrink:0;}
+  .mark.correct{color:var(--stamp-red);}
+  .mark.wrong{color:#9AA5AF;}
+  .correct-answer{font-size:.8em;color:var(--stamp-red);margin-top:2px;margin-left:40px;}
+
+  .qcard.checked.is-correct{background:#FFF7F3;}
+  .qcard.checked.is-wrong{background:#F6F7F4;}
+
+  footer{
+    max-width:760px;margin:26px auto 0;padding:0 18px;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .check-btn{
+    font-family:"Yomogi";
+    font-size:1.3em;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:12px 40px;
+    border-radius:30px;
+    cursor:pointer;
+    box-shadow:0 3px 0 #1a2532;
+  }
+  .check-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #1a2532;}
+  .check-btn:disabled{background:#c8c8c8;box-shadow:none;cursor:default;}
+
+  .result{
+    position:relative;
+    text-align:center;
+    font-family:"Yomogi";
+    font-size:1.6em;
+    color:var(--ink);
+    opacity:0;
+    transform:scale(.7) rotate(-6deg);
+    transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .result.show{opacity:1;transform:scale(1) rotate(-4deg);}
+  .stamp{
+    display:inline-block;
+    border:4px solid var(--stamp-red);
+    color:var(--stamp-red);
+    border-radius:50%;
+    padding:14px 22px;
+    line-height:1.1;
+  }
+
+  @media (max-width:520px){
+    .mc-options{margin-left:0;}
+    header h1{font-size:1.7em;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>なつやすみ まいにちドリル</h1>
+    <div class="sub">1にち 20もん・5この こたえから えらんで、さいごに こたえあわせ！</div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab-group">
+      <button class="tab-btn grade active" data-grade="2">2年生</button>
+      <button class="tab-btn grade" data-grade="4">4年生</button>
+    </div>
+    <div class="tab-group">
+      <button class="tab-btn kokugo active" data-subject="kokugo">こくご</button>
+      <button class="tab-btn sansu" data-subject="sansu">さんすう</button>
+    </div>
+  </div>
+
+  <div class="date-row">
+    <span id="dateLabel"></span>
+    <input type="date" id="datePicker">
+    <button class="today-btn" id="todayBtn">きょう</button>
+  </div>
+  <div class="stats" id="stats"></div>
+
+  <div class="qlist" id="qlist"></div>
+
+  <footer>
+    <button class="check-btn" id="checkBtn">こたえあわせ</button>
+    <div class="result" id="result"></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- seeded random ----------
+  function cyrb53(str){
+    let h1=0xdeadbeef^0, h2=0x41c6ce57^0;
+    for(let i=0;i<str.length;i++){
+      const ch=str.charCodeAt(i);
+      h1=Math.imul(h1^ch,2654435761); h2=Math.imul(h2^ch,1597334677);
+    }
+    h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+    h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+    return 4294967296*(2097151&h2)+(h1>>>0);
+  }
+  function mulberry32(seed){
+    let a=seed>>>0;
+    return function(){
+      a|=0; a=a+0x6D2B79F5|0;
+      let t=Math.imul(a^a>>>15,1|a);
+      t=t+Math.imul(t^t>>>7,61|t)^t;
+      return ((t^t>>>14)>>>0)/4294967296;
+    };
+  }
+  function makeRng(dateStr,grade,subject){
+    return mulberry32(cyrb53(dateStr+"|"+grade+"|"+subject));
+  }
+  function randInt(rng,min,max){ return Math.floor(rng()*(max-min+1))+min; }
+  function pick(rng,arr){ return arr[Math.floor(rng()*arr.length)]; }
+  function shuffle(rng,arr){
+    const a=arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(rng()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+  function daysSinceEpoch(dateStr){
+    return Math.floor(new Date(dateStr+"T00:00:00Z").getTime()/86400000);
+  }
+  function zenkakuToHan(s){
+    return s.replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0));
+  }
+  function norm(s){
+    return zenkakuToHan(String(s||"")).trim().replace(/\s+/g,"");
+  }
+
+  // ---------- 5択の選択肢づくり ----------
+  function numericDistractors(rng, correctStr){
+    const n = parseInt(correctStr,10);
+    const used = new Set([n]);
+    const offsets = shuffle(rng, [1,-1,2,-2,3,-3,5,-5,9,-9,10,-10,11,-11]);
+    const result = [];
+    for(const off of offsets){
+      const cand = n+off;
+      if(cand>=0 && !used.has(cand)){
+        used.add(cand); result.push(String(cand));
+        if(result.length>=4) break;
+      }
+    }
+    let extra=12;
+    while(result.length<4){
+      const cand=n+extra;
+      if(!used.has(cand)){ used.add(cand); result.push(String(cand)); }
+      extra++;
+    }
+    return result;
+  }
+  function remainderDistractors(rng, correctStr){
+    const m = correctStr.match(/^(\d+)あまり(\d+)$/);
+    if(!m) return numericDistractors(rng, correctStr);
+    const q = parseInt(m[1],10), r = parseInt(m[2],10);
+    const used = new Set([correctStr]);
+    const result = [];
+    for(const off of shuffle(rng,[1,-1,2,-2])){
+      const nq=q+off;
+      if(nq>=0){
+        const s=`${nq}あまり${r}`;
+        if(!used.has(s)){ used.add(s); result.push(s); if(result.length>=2) break; }
+      }
+    }
+    for(const off of shuffle(rng,[1,-1,2,-2])){
+      if(result.length>=4) break;
+      const nr=r+off;
+      if(nr>=0){
+        const s=`${q}あまり${nr}`;
+        if(!used.has(s)){ used.add(s); result.push(s); }
+      }
+    }
+    let extra=3;
+    while(result.length<4){
+      const s=`${q+extra}あまり${r}`;
+      if(!used.has(s)){ used.add(s); result.push(s); }
+      extra++;
+    }
+    return result.slice(0,4);
+  }
+  function buildChoicesForMath(rng, q){
+    const distractors = /あまり/.test(q.answer) ? remainderDistractors(rng,q.answer) : numericDistractors(rng,q.answer);
+    const options = shuffle(rng, [q.answer, ...distractors]);
+    return {options, correctIndex: options.indexOf(q.answer)};
+  }
+  function buildChoicesForKokugo(rng, pool, item){
+    const sameType = pool.filter(p => p.type===item.type && norm(p.answer)!==norm(item.answer));
+    const seen = new Set([norm(item.answer)]);
+    const candidates = [];
+    for(const p of shuffle(rng, sameType)){
+      const key = norm(p.answer);
+      if(!seen.has(key)){
+        seen.add(key); candidates.push(p.answer);
+        if(candidates.length>=4) break;
+      }
+    }
+    let filler=1;
+    while(candidates.length<4){ candidates.push(item.answer+"　"+filler); filler++; }
+    const options = shuffle(rng, [item.answer, ...candidates]);
+    return {options, correctIndex: options.indexOf(item.answer)};
+  }
+
+  // ---------- math generators ----------
+  // 2年生 1学期の範囲：くり上がり・くり下がりのたし算/ひき算の筆算、100より大きい数、長さ。
+  // 九九（かけ算）は多くの学校で2学期以降のため、ここには含めていません。
+  const mathGensGrade2 = [
+    rng=>{ const a=randInt(rng,10,89), b=randInt(rng,1,9);
+      return {label:"たしざん", prompt:`${a} ＋ ${b} ＝`, answer:String(a+b)}; },
+    rng=>{ const a=randInt(rng,10,69), b=randInt(rng,10,29);
+      return {label:"たしざん（くり上がり）", prompt:`${a} ＋ ${b} ＝`, answer:String(a+b)}; },
+    rng=>{ const a=randInt(rng,100,500), b=randInt(rng,10,99);
+      return {label:"大きい数のたしざん", prompt:`${a} ＋ ${b} ＝`, answer:String(a+b)}; },
+    rng=>{ const a=randInt(rng,11,99), b=randInt(rng,1,9);
+      return {label:"ひきざん", prompt:`${a} － ${b} ＝`, answer:String(a-b)}; },
+    rng=>{ const a=randInt(rng,30,99); const b=randInt(rng,10,Math.min(a-1,29));
+      return {label:"ひきざん（くり下がり）", prompt:`${a} － ${b} ＝`, answer:String(a-b)}; },
+    rng=>{ const a=randInt(rng,2,9), b=randInt(rng,2,9);
+      return {label:"文しょうだい", prompt:`赤い花が ${a}本、白い花が ${b}本 さいています。あわせて なん本ですか。`, answer:String(a+b)}; },
+    rng=>{ const a=randInt(rng,10,20), b=randInt(rng,1,9);
+      return {label:"文しょうだい", prompt:`いろがみが ${a}まい ありました。${b}まい つかいました。のこりは なんまいですか。`, answer:String(a-b)}; },
+    rng=>{ const a=randInt(rng,15,30); const b=randInt(rng,1,a-1);
+      return {label:"文しょうだい（長さ）", prompt:`テープが ${a}cm ありました。${b}cm 切りとりました。のこりは 何cmですか。`, answer:String(a-b)}; },
+    rng=>{ const a=randInt(rng,20,40); const b=randInt(rng,5,Math.min(25,a-1));
+      return {label:"文しょうだい", prompt:`バスに ${a}人 のっていました。バスていで ${b}人 おりました。のこりは なん人ですか。`, answer:String(a-b)}; },
+  ];
+
+  // 4年生 1学期の範囲：大きい数、角度、かけ算の筆算（復習）、わり算の筆算（1けた・2けたでわる）。
+  // 小数のかけ算・わり算や分数の計算は多くの学校で2学期以降のため、ここには含めていません。
+  const mathGensGrade4 = [
+    rng=>{ const a=randInt(rng,12,98), b=randInt(rng,2,9);
+      return {label:"かけざんの筆算", prompt:`${a} × ${b} ＝`, answer:String(a*b)}; },
+    rng=>{ const a=randInt(rng,102,998), b=randInt(rng,2,9);
+      return {label:"かけざんの筆算", prompt:`${a} × ${b} ＝`, answer:String(a*b)}; },
+    rng=>{ const a=randInt(rng,12,89), b=randInt(rng,11,19);
+      return {label:"かけざんの筆算（2けた×2けた）", prompt:`${a} × ${b} ＝`, answer:String(a*b)}; },
+    rng=>{ const b=randInt(rng,2,9); const q=randInt(rng,2,20); const a=b*q;
+      return {label:"わり算の筆算（1けたでわる）", prompt:`${a} ÷ ${b} ＝`, answer:String(q)}; },
+    rng=>{ const b=randInt(rng,2,9); const q=randInt(rng,2,15); const r=randInt(rng,1,b-1); const a=b*q+r;
+      return {label:"わり算の筆算（あまりあり）", prompt:`${a} ÷ ${b} ＝ 　あまり`, answer:`${q}あまり${r}`}; },
+    rng=>{ const b=randInt(rng,11,19); const q=randInt(rng,2,9); const a=b*q;
+      return {label:"わり算の筆算（2けたでわる）", prompt:`${a} ÷ ${b} ＝`, answer:String(q)}; },
+    rng=>{ const a=randInt(rng,10,150), b=randInt(rng,10,Math.max(10,170-a));
+      return {label:"角度のたしざん", prompt:`${a}° と ${b}° を あわせると 何度ですか。`, answer:String(a+b)}; },
+    rng=>{ const a=randInt(rng,1000,9000), b=randInt(rng,100,999);
+      return {label:"大きい数のたしざん", prompt:`${a} ＋ ${b} ＝`, answer:String(a+b)}; },
+    rng=>{ const a=randInt(rng,120,890), b=randInt(rng,2,9);
+      return {label:"文しょうだい（かけ算）", prompt:`1はこに あめが ${b}こずつ 入っています。${a}はこ あると、あめは ぜんぶで なんこですか。`, answer:String(a*b)}; },
+    rng=>{ const b=randInt(rng,3,8); const q=randInt(rng,4,25); const a=b*q;
+      return {label:"文しょうだい（わり算）", prompt:`${a}まいの おり紙を、${b}人で 同じ数ずつ 分けます。1人分は なんまいですか。`, answer:String(q)}; },
+    rng=>{ const a=randInt(rng,150,980), b=randInt(rng,120,a-1);
+      return {label:"文しょうだい（ひき算）", prompt:`ある町の 人口は ${a}人です。となり町の 人口は ${b}人です。ちがいは なん人ですか。`, answer:String(a-b)}; },
+  ];
+
+  // ---------- kokugo pools ----------
+  function readingQ(word,yomi,sentence,alt){
+    return {type:"reading",label:"読み方",
+      prompt:`つぎの文の　<b>${word}</b>　の読みかたを　ひらがなで　書きましょう。<br>「${sentence}」`,
+      answer:yomi, alt:alt||[]};
+  }
+  function writingQ(yomi,kanji,alt){
+    return {type:"writing",label:"かん字を書く",
+      prompt:`つぎの「${yomi}」を　かん字で　書きましょう。`,
+      answer:kanji, alt:alt||[]};
+  }
+  function oppositeQ(word,ans,alt){
+    return {type:"vocab",label:"反対の意味の言葉",
+      prompt:`「${word}」の　反対（はんたい）の意味の言葉を　書きましょう。`,
+      answer:ans, alt:alt||[]};
+  }
+
+  const kokugoGrade2 = [
+    readingQ("東西","とうざい","東西南北を　地図で　しらべる。"),
+    readingQ("汽車","きしゃ","むかしは　汽車に　のって　旅をした。"),
+    readingQ("兄弟","きょうだい","わたしには　兄弟が　二人　います。"),
+    readingQ("教室","きょうしつ","教室で　べんきょうする。"),
+    readingQ("近所","きんじょ","近所の　こうえんで　あそぶ。"),
+    readingQ("計算","けいさん","算数の　計算問題を　とく。"),
+    readingQ("午後","ごご","午後から　雨が　ふる。"),
+    readingQ("公園","こうえん","公園で　ボールあそびを　した。"),
+    readingQ("黒板","こくばん","先生が　黒板に　字を　書く。"),
+    readingQ("姉妹","しまい","わたしたちは　姉妹です。"),
+    readingQ("新聞","しんぶん","父は　毎朝　新聞を　読む。"),
+    readingQ("星空","ほしぞら","夜、星空を　見上げた。"),
+    readingQ("麦茶","むぎちゃ","夏は　つめたい麦茶を　のむ。"),
+    readingQ("地図","ちず","地図を　見て　道を　しらべる。"),
+    readingQ("電話","でんわ","おばあちゃんに　電話を　かける。"),
+    writingQ("とうざい","東西"),
+    writingQ("きょうしつ","教室"),
+    writingQ("こうえん","公園"),
+    writingQ("しんぶん","新聞"),
+    writingQ("でんわ","電話"),
+    writingQ("なんぼく","南北"),
+    writingQ("はんぶん","半分"),
+    writingQ("まいあさ","毎朝"),
+    writingQ("いもうと","妹"),
+    writingQ("きんじょ","近所"),
+    oppositeQ("大きい","小さい",["ちいさい"]),
+    oppositeQ("長い","短い",["みじかい"]),
+    oppositeQ("明るい","暗い",["くらい"]),
+    oppositeQ("強い","弱い",["よわい"]),
+    oppositeQ("高い","低い",["ひくい"]),
+    oppositeQ("多い","少ない",["すくない"]),
+    oppositeQ("新しい","古い",["ふるい"]),
+    oppositeQ("重い","軽い",["かるい"]),
+  ];
+
+  const kokugoGrade4 = [
+    readingQ("案内","あんない","係の人が　会場まで　案内して　くれた。"),
+    readingQ("印刷","いんさつ","プリントを　印刷する。"),
+    readingQ("英語","えいご","来週から　英語の　じゅぎょうが　ある。"),
+    readingQ("完成","かんせい","もけいが　やっと　完成した。"),
+    readingQ("機械","きかい","工場には　大きな　機械が　ある。"),
+    readingQ("議会","ぎかい","市の　議会で　話し合われた。"),
+    readingQ("救急","きゅうきゅう","救急車が　サイレンを　ならして　走る。"),
+    readingQ("競争","きょうそう","走る　速さを　競争する。"),
+    readingQ("結果","けっか","テストの　結果が　かえってきた。"),
+    readingQ("健康","けんこう","健康の　ために　早ね早おきを　する。"),
+    readingQ("参加","さんか","運動会に　参加する。"),
+    readingQ("失敗","しっぱい","じっけんに　失敗した。"),
+    readingQ("種類","しゅるい","この店には　多くの　種類の　パンが　ある。"),
+    readingQ("順番","じゅんばん","順番に　ならんで　待つ。"),
+    readingQ("選手","せんしゅ","選手が　入場して　きた。"),
+    writingQ("あんない","案内"),
+    writingQ("けんこう","健康"),
+    writingQ("さんか","参加"),
+    writingQ("しっぱい","失敗"),
+    writingQ("しゅるい","種類"),
+    writingQ("せんしゅ","選手"),
+    writingQ("きゅうきゅう","救急"),
+    writingQ("けっか","結果"),
+    writingQ("じゅんばん","順番"),
+    writingQ("えいご","英語"),
+    oppositeQ("安全","危険",["きけん"]),
+    oppositeQ("成功","失敗",["しっぱい"]),
+    oppositeQ("開始","終了",["しゅうりょう"]),
+    oppositeQ("上手","下手",["へた"]),
+    oppositeQ("集合","解散",["かいさん"]),
+    oppositeQ("賛成","反対",["はんたい"]),
+    oppositeQ("増加","減少",["げんしょう"]),
+    oppositeQ("複雑","単純",["たんじゅん"]),
+  ];
+
+  const kokugoPools = {2:kokugoGrade2, 4:kokugoGrade4};
+  const mathGens = {2:mathGensGrade2, 4:mathGensGrade4};
+
+  // ---------- question builders ----------
+  function buildMathQuestions(grade,dateStr){
+    const rng = makeRng(dateStr,grade,"sansu");
+    const gens = mathGens[grade];
+    const qs=[];
+    for(let i=0;i<20;i++){
+      const g = pick(rng,gens);
+      const q = g(rng);
+      const {options, correctIndex} = buildChoicesForMath(rng, q);
+      qs.push({label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex});
+    }
+    return qs;
+  }
+  function buildKokugoQuestions(grade,dateStr){
+    const pool = kokugoPools[grade];
+    const dayIdx = daysSinceEpoch(dateStr);
+    const step = 7;
+    const start = ((dayIdx*step)%pool.length+pool.length)%pool.length;
+    const rotated = pool.slice(start).concat(pool.slice(0,start));
+    const rng = makeRng(dateStr,grade,"kokugo");
+    const chosen = shuffle(rng, rotated.slice(0, Math.min(20,pool.length)));
+    while(chosen.length<20){ chosen.push(pick(rng,pool)); }
+    return chosen.slice(0,20).map(q=>{
+      const {options, correctIndex} = buildChoicesForKokugo(rng, pool, q);
+      return {label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex};
+    });
+  }
+  function buildQuestions(grade,subject,dateStr){
+    return subject==="sansu" ? buildMathQuestions(grade,dateStr) : buildKokugoQuestions(grade,dateStr);
+  }
+
+  // ---------- state ----------
+  let state = { grade:2, subject:"kokugo", date: todayStr() };
+
+  function todayStr(){
+    const d=new Date();
+    const tz = d.getTimezoneOffset();
+    const local = new Date(d.getTime()-tz*60000);
+    return local.toISOString().slice(0,10);
+  }
+
+  // ---------- storage ----------
+  async function loadRecord(){
+    const key = `record:${state.grade}:${state.subject}:${state.date}`;
+    try{
+      const res = await window.storage.get(key,false);
+      return res ? JSON.parse(res.value) : null;
+    }catch(e){ return null; }
+  }
+  async function saveRecord(rec){
+    const key = `record:${state.grade}:${state.subject}:${state.date}`;
+    try{ await window.storage.set(key, JSON.stringify(rec), false); }catch(e){ console.error(e); }
+  }
+  async function countCompleted(){
+    try{
+      const res = await window.storage.list(`record:${state.grade}:${state.subject}:`, false);
+      return res && res.keys ? res.keys.length : 0;
+    }catch(e){ return 0; }
+  }
+
+  // ---------- rendering ----------
+  let currentQuestions = [];
+  let selections = {};
+
+  function subjColor(){ return state.subject==="kokugo" ? "var(--kokugo)" : "var(--sansu)"; }
+
+  async function render(){
+    document.querySelectorAll(".tab-btn.grade").forEach(b=>b.classList.toggle("active", b.dataset.grade==String(state.grade)));
+    document.querySelectorAll(".tab-btn.kokugo,.tab-btn.sansu").forEach(b=>b.classList.toggle("active", b.dataset.subject===state.subject));
+    document.getElementById("datePicker").value = state.date;
+    const dObj = new Date(state.date+"T00:00:00");
+    const wd = ["日","月","火","水","木","金","土"][dObj.getDay()];
+    document.getElementById("dateLabel").textContent = `${state.date}（${wd}）　${state.grade}年生・${state.subject==="kokugo"?"こくご":"さんすう"}`;
+
+    currentQuestions = buildQuestions(state.grade, state.subject, state.date);
+    selections = {};
+    const list = document.getElementById("qlist");
+    list.innerHTML = "";
+    currentQuestions.forEach((q,i)=>{
+      const card = document.createElement("div");
+      card.className="qcard";
+      card.style.setProperty("--subject-color", subjColor());
+      card.dataset.idx=i;
+      const optsHtml = q.options.map((opt,oi)=>`
+          <button type="button" class="opt-btn" data-idx="${i}" data-oi="${oi}">
+            <span class="opt-num">${oi+1}</span><span>${opt}</span>
+          </button>`).join("");
+      card.innerHTML = `
+        <div class="qcard-top">
+          <div class="qnum">${i+1}</div>
+          <div class="qbody">
+            <span class="qlabel">${q.label}</span>
+            <div class="qprompt">${q.prompt}</div>
+          </div>
+          <span class="mark"></span>
+        </div>
+        <div class="mc-options" data-idx="${i}">${optsHtml}</div>
+        <div class="correct-answer" style="display:none;"></div>`;
+      list.appendChild(card);
+    });
+
+    list.querySelectorAll(".opt-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = Number(btn.dataset.idx);
+        if(btn.disabled) return;
+        selections[i] = Number(btn.dataset.oi);
+        list.querySelectorAll(`.opt-btn[data-idx="${i}"]`).forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+    });
+
+    document.getElementById("result").className="result";
+    document.getElementById("result").innerHTML="";
+    document.getElementById("checkBtn").disabled=false;
+
+    const rec = await loadRecord();
+    if(rec && rec.selections){
+      selections = {...rec.selections};
+      Object.entries(selections).forEach(([i,oi])=>{
+        const btn = list.querySelector(`.opt-btn[data-idx="${i}"][data-oi="${oi}"]`);
+        if(btn) btn.classList.add("selected");
+      });
+      if(rec.checked){ applyGrading(rec.selections, rec.score); }
+    }
+    const n = await countCompleted();
+    document.getElementById("stats").textContent = `これまで、この学年・教科で ${n}日ぶん がんばったよ！`;
+  }
+
+  function applyGrading(sel, score){
+    const cards = document.querySelectorAll(".qcard");
+    cards.forEach((card,i)=>{
+      const q = currentQuestions[i];
+      const chosen = sel[i];
+      const r = chosen === q.correctIndex;
+      card.classList.add("checked");
+      card.classList.toggle("is-correct", r);
+      card.classList.toggle("is-wrong", !r);
+      const mark = card.querySelector(".mark");
+      mark.textContent = r ? "○" : "✕";
+      mark.className = "mark "+(r?"correct":"wrong");
+      card.querySelectorAll(".opt-btn").forEach((btn,oi)=>{
+        btn.disabled = true;
+        if(oi===q.correctIndex) btn.classList.add("correct");
+        else if(oi===chosen) btn.classList.add("wrong-selected");
+      });
+      const ansDiv = card.querySelector(".correct-answer");
+      if(!r){
+        ansDiv.style.display="block";
+        ansDiv.textContent = `せいかい： ${q.answer}`;
+      } else {
+        ansDiv.style.display="none";
+      }
+    });
+    showResult(score);
+  }
+
+  function showResult(score){
+    const el = document.getElementById("result");
+    let msg;
+    if(score===20) msg = "ぜんもん せいかい！　すごい！";
+    else if(score>=15) msg = "よくできました！";
+    else if(score>=10) msg = "よくがんばったね！";
+    else msg = "もういちど　やってみよう！";
+    el.innerHTML = `<div class="stamp">${score}／ 20<br><span style="font-size:.55em;">${msg}</span></div>`;
+    requestAnimationFrame(()=>el.classList.add("show"));
+  }
+
+  async function handleCheck(){
+    if(Object.keys(selections).length < currentQuestions.length){
+      alert("まだ こたえを えらんでいない もんだいが あるよ。ぜんぶ えらんでから おしてね。");
+      return;
+    }
+    let score=0;
+    currentQuestions.forEach((q,i)=>{ if(selections[i]===q.correctIndex) score++; });
+    applyGrading(selections, score);
+    document.getElementById("checkBtn").disabled=true;
+    await saveRecord({selections, score, checked:true, total:20});
+    const n = await countCompleted();
+    document.getElementById("stats").textContent = `これまで、この学年・教科で ${n}日ぶん がんばったよ！`;
+  }
+
+  // ---------- events ----------
+  document.querySelectorAll(".tab-btn.grade").forEach(b=>{
+    b.addEventListener("click",()=>{ state.grade = Number(b.dataset.grade); render(); });
+  });
+  document.querySelectorAll(".tab-btn.kokugo,.tab-btn.sansu").forEach(b=>{
+    b.addEventListener("click",()=>{ state.subject = b.dataset.subject; render(); });
+  });
+  document.getElementById("datePicker").addEventListener("change",(e)=>{
+    if(e.target.value){ state.date = e.target.value; render(); }
+  });
+  document.getElementById("todayBtn").addEventListener("click",()=>{
+    state.date = todayStr(); render();
+  });
+  document.getElementById("checkBtn").addEventListener("click", handleCheck);
+
+  render();
+})();
+</script>
+</body>
+</html>
