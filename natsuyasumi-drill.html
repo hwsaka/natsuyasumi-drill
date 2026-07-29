@@ -16,6 +16,10 @@
     --kokugo-soft:#F7DEDB;
     --sansu:#2A7F8E;
     --sansu-soft:#DCEEEF;
+    --rika:#4C8C4A;
+    --rika-soft:#DFEEDD;
+    --shakai:#B8823E;
+    --shakai-soft:#F3E6D2;
     --stamp-red:#C8352C;
     --paper-fold:#F0E9D6;
   }
@@ -71,7 +75,10 @@
   .tab-btn.active.grade{background:var(--ink);color:#fff;}
   .tab-btn.active.kokugo{background:var(--kokugo);color:#fff;}
   .tab-btn.active.sansu{background:var(--sansu);color:#fff;}
+  .tab-btn.active.rika{background:var(--rika);color:#fff;}
+  .tab-btn.active.shakai{background:var(--shakai);color:#fff;}
   .tab-btn:hover:not(.active){background:#ffffff88;}
+  .tab-btn:disabled{opacity:.35;cursor:default;}
 
   .date-row{
     text-align:center;
@@ -257,6 +264,8 @@
     <div class="tab-group">
       <button class="tab-btn kokugo active" data-subject="kokugo">こくご</button>
       <button class="tab-btn sansu" data-subject="sansu">さんすう</button>
+      <button class="tab-btn rika" data-subject="rika">りか</button>
+      <button class="tab-btn shakai" data-subject="shakai">しゃかい</button>
     </div>
   </div>
 
@@ -535,6 +544,71 @@
   ];
 
   const kokugoPools = {2:kokugoGrade2, 4:kokugoGrade4};
+
+  // ---------- りか（4年生 1学期の範囲） ----------
+  // 季節と生き物(春)、天気と気温、とじこめた空気と水、電気の回路の基本、骨と筋肉。
+  // 単元の順番は教科書会社によって多少前後しますが、いずれも1学期に習うことが多い内容にしています。
+  function mcQ(label, prompt, options, answer, explain){
+    return {label, prompt, options, answer, explain};
+  }
+  const rikaGrade4 = [
+    mcQ("季節と生き物", "春になると日本にやってくる、南の国から渡ってくる代表的な鳥はどれですか。", ["ツバメ","ハクチョウ","ガン","フクロウ"], "ツバメ"),
+    mcQ("季節と生き物", "サクラの花がさくのは、主にどの季節ですか。", ["春","夏","秋","冬"], "春"),
+    mcQ("季節と生き物", "ヘチマの種をまくと、つるがのびはじめるのはどのころですか。", ["春〜初夏","真冬","秋の終わり","一年中いつでも"], "春〜初夏"),
+    mcQ("季節と生き物", "春から夏にかけて、気温はどのように変化していきますか。", ["だんだん高くなる","だんだん低くなる","変わらない","急に0度になる"], "だんだん高くなる"),
+    mcQ("季節と生き物", "夏になると鳴き声が聞こえ始めるセミが、成虫になるまえの様子として正しいものはどれですか。", ["幼虫が土の中で長い間すごす","たまごのまま冬をこす","水の中で育つ","花のみつだけを食べて育つ"], "幼虫が土の中で長い間すごす"),
+    mcQ("天気と気温", "晴れの日、1日の気温がふつう一番高くなるのはいつごろですか。", ["午後2時ごろ","朝6時ごろ","正午ちょうど","夜9時ごろ"], "午後2時ごろ"),
+    mcQ("天気と気温", "気温をはかるとき、温度計に日光を直接あてないようにするのはなぜですか。", ["正確な気温がはかれなくなるから","温度計がこわれるから","色が変わるから","電池がきれるから"], "正確な気温がはかれなくなるから"),
+    mcQ("天気と気温", "晴れの日とくもりの日で、1日の気温の変化が大きいのはどちらですか。", ["晴れの日","くもりの日","どちらも同じ","決まっていない"], "晴れの日"),
+    mcQ("天気と気温", "気温をはかる場所として正しいものはどれですか。", ["地面から1.2〜1.5mの高さで、風通しのよい日かげ","直射日光があたるコンクリートの上","教室の中","水そうの中"], "地面から1.2〜1.5mの高さで、風通しのよい日かげ"),
+    mcQ("とじこめた空気と水", "とじこめた空気をおすと、体積はどうなりますか。", ["おしちぢめられて小さくなる","大きくなる","変わらない","なくなる"], "おしちぢめられて小さくなる"),
+    mcQ("とじこめた空気と水", "とじこめた水をおすと、体積はどうなりますか。", ["ほとんど変わらない","空気と同じくらいちぢむ","大きくふくらむ","こおる"], "ほとんど変わらない"),
+    mcQ("とじこめた空気と水", "空気でっぽうで玉が勢いよく飛び出すのはなぜですか。", ["おしちぢめられた空気がもとにもどろうとする力で玉をおすから","玉が軽いから","筒の中が真空になるから","水が玉をおすから"], "おしちぢめられた空気がもとにもどろうとする力で玉をおすから"),
+    mcQ("とじこめた空気と水", "空気をおしちぢめるほど、もとにもどろうとする力はどうなりますか。", ["大きくなる","小さくなる","なくなる","変わらない"], "大きくなる"),
+    mcQ("とじこめた空気と水", "水でっぽうで水が勢いよく飛び出すのは、水にどんな性質があるからですか。", ["おしちぢめられないので、おした力がそのまま伝わるから","気体になりやすいから","電気を通すから","軽いから"], "おしちぢめられないので、おした力がそのまま伝わるから"),
+    mcQ("電気の回路", "豆電球に明かりをつけるために必要な組み合わせとして正しいものはどれですか。", ["かん電池・豆電球・どう線を輪のようにつなぐ","かん電池だけ","どう線だけ","豆電球だけ"], "かん電池・豆電球・どう線を輪のようにつなぐ"),
+    mcQ("電気の回路", "回路の途中でどう線が切れると、豆電球はどうなりますか。", ["消える","もっと明るくなる","そのまま光り続ける","色が変わる"], "消える"),
+    mcQ("電気の回路", "次のうち、電気を通すものはどれですか。", ["鉄などの金属","ガラス","木","ゴム"], "鉄などの金属"),
+    mcQ("電気の回路", "かん電池の向き（＋極と－極）を逆にすると、モーターの回る向きはどうなりますか。", ["反対になる","回らなくなる","速くまわる","こわれる"], "反対になる"),
+    mcQ("電気の回路", "かん電池1こに豆電球を2こ並列につなぐと、1こだけをつないだときと明るさはどうなりますか。", ["ほとんど同じ明るさ","暗くなる","2倍明るくなる","消えてしまう"], "ほとんど同じ明るさ"),
+    mcQ("電気の回路", "かん電池1こに豆電球を2こ直列につなぐと、1こだけをつないだときと明るさはどうなりますか。", ["暗くなる","明るさは変わらない","明るくなる","消える"], "暗くなる"),
+    mcQ("電気の回路", "空気でっぽうの玉が飛び出す勢いを強くするには、どうすればよいですか。", ["おしぼうを強く、速くおす","おしぼうをゆっくりおす","筒を短くする","玉を大きくする"], "おしぼうを強く、速くおす"),
+    mcQ("骨と筋肉", "人の体を支えたり、脳や心ぞうを守ったりするはたらきをするものは何ですか。", ["骨","血液","筋肉","皮ふ"], "骨"),
+    mcQ("骨と筋肉", "関節のはたらきとして正しいものはどれですか。", ["骨と骨のつなぎ目で体を曲げられるようにする","血液を送り出す","食べ物を消化する","呼吸をする"], "骨と骨のつなぎ目で体を曲げられるようにする"),
+    mcQ("骨と筋肉", "ひじを曲げるとき、内側の筋肉はどうなりますか。", ["ちぢむ","ゆるむ","変化しない","なくなる"], "ちぢむ"),
+    mcQ("骨と筋肉", "人が体を動かせるのは、骨のまわりについている何のはたらきによるものですか。", ["筋肉","血管","皮ふ","つめ"], "筋肉"),
+    mcQ("骨と筋肉", "心ぞうを守るはたらきをしている、むねのあたりの骨を何といいますか。", ["ろっ骨（肋骨）","うでの骨","あしの骨","背骨だけ"], "ろっ骨（肋骨）"),
+    mcQ("季節と生き物", "ツバメのように、春から夏にかけて日本にやってきて子育てをする鳥を何と呼びますか。", ["夏鳥","冬鳥","留鳥","渡らない鳥"], "夏鳥"),
+  ];
+
+  // ---------- しゃかい（4年生 1学期の範囲） ----------
+  // 都道府県の名前と位置、県（福岡県）のようす、ごみの処理とリサイクル、水とくらし、地図の基礎技能。
+  const shakaiGrade4 = [
+    mcQ("都道府県", "日本の都道府県は全部でいくつありますか。", ["47","45","50","43"], "47"),
+    mcQ("都道府県", "日本の首都はどこですか。", ["東京都","大阪府","京都府","名古屋市"], "東京都"),
+    mcQ("都道府県", "日本で一番面積が大きい都道府県はどこですか。", ["北海道","岩手県","福島県","長野県"], "北海道"),
+    mcQ("都道府県", "「府」がつく都道府県は、大阪府と、あと一つはどこですか。", ["京都府","愛知県","兵庫県","奈良県"], "京都府"),
+    mcQ("都道府県", "沖縄県は、7つの地方区分のうち、どの地方にふくまれますか。", ["九州地方","中国地方","近畿地方","関東地方"], "九州地方"),
+    mcQ("福岡県のようす", "福岡県の県庁がある都市（県庁所在地）はどこですか。", ["福岡市","北九州市","久留米市","大牟田市"], "福岡市"),
+    mcQ("福岡県のようす", "福岡県ととなり合っていない県はどれですか。", ["東京都","佐賀県","大分県","熊本県"], "東京都"),
+    mcQ("福岡県のようす", "北九州市がある都道府県はどこですか。", ["福岡県","山口県","大分県","佐賀県"], "福岡県"),
+    mcQ("福岡県のようす", "福岡県の北側に面している海はどれですか。", ["玄界灘（日本海側）","太平洋","瀬戸内海","オホーツク海"], "玄界灘（日本海側）"),
+    mcQ("福岡県のようす", "糸島市がある都道府県はどこですか。", ["福岡県","佐賀県","長崎県","大分県"], "福岡県"),
+    mcQ("福岡県のようす", "九州地方で一番人口が多い都市はどこですか。", ["福岡市","北九州市","熊本市","鹿児島市"], "福岡市"),
+    mcQ("ごみの処理", "家庭から出るごみを、種類ごとに分けて出すことを何といいますか。", ["分別","リサイクル","しょ理","回収"], "分別"),
+    mcQ("ごみの処理", "びんやかん、ペットボトルなどを資源として再び利用することを何といいますか。", ["リサイクル","しょ却","うめ立て","焼却"], "リサイクル"),
+    mcQ("ごみの処理", "もえるごみは、多くの場合どこで処理されますか。", ["清掃工場（しょうきゃく施設）","リサイクル工場","浄水場","下水処理場"], "清掃工場（しょうきゃく施設）"),
+    mcQ("ごみの処理", "ごみを正しく分別すると、どのようなよいことがありますか。", ["資源を有効に使え、ごみの量をへらせる","ごみがすぐになくなる","ごみ収集車がいらなくなる","家がきれいになるだけ"], "資源を有効に使え、ごみの量をへらせる"),
+    mcQ("ごみの処理", "金属でできたなべやフライパンは、多くの場合どのごみとして出しますか。", ["もえないごみ","もえるごみ","生ごみ","古紙"], "もえないごみ"),
+    mcQ("水とくらし", "わたしたちが使う水道の水は、多くの場合どこできれいにされますか。", ["浄水場","清掃工場","発電所","市役所"], "浄水場"),
+    mcQ("水とくらし", "浄水場では、川やダムから取り入れた水に対して主に何を行いますか。", ["ごみやにごりを取りのぞき、消毒する","色をつける","あたためる","塩を加える"], "ごみやにごりを取りのぞき、消毒する"),
+    mcQ("水とくらし", "使った後のよごれた水は、家庭からどこへ流れていきますか。", ["下水道を通って下水処理場へ","そのまま川へ直接","そのまま海へ直接","土にしみこませるだけ"], "下水道を通って下水処理場へ"),
+    mcQ("地図の基礎", "地図で、土地の高さが同じところを結んだ線を何といいますか。", ["等高線","緯線","経線","境界線"], "等高線"),
+    mcQ("地図の基礎", "地図の上で、ふつう上の方はどの方角を指しますか。", ["北","南","東","西"], "北"),
+    mcQ("地図の基礎", "地図で、実際のきょりを縮めて表した割合を何といいますか。", ["縮尺","等高線","方位","凡例"], "縮尺"),
+  ];
+  const rikaShakaiPools = {rika:rikaGrade4, shakai:shakaiGrade4};
+
   const mathGens = {2:mathGensGrade2, 4:mathGensGrade4};
 
   // ---------- question builders ----------
@@ -564,8 +638,24 @@
       return {label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex};
     });
   }
+  function buildFixedChoiceQuestions(pool, dateStr, subjectKey){
+    const dayIdx = daysSinceEpoch(dateStr);
+    const step = 7;
+    const start = ((dayIdx*step)%pool.length+pool.length)%pool.length;
+    const rotated = pool.slice(start).concat(pool.slice(0,start));
+    const rng = makeRng(dateStr,4,subjectKey);
+    const chosen = shuffle(rng, rotated.slice(0, Math.min(20,pool.length)));
+    while(chosen.length<20){ chosen.push(pick(rng,pool)); }
+    return chosen.slice(0,20).map(q=>{
+      const options = shuffle(rng, q.options);
+      return {label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex: options.indexOf(q.answer)};
+    });
+  }
   function buildQuestions(grade,subject,dateStr){
-    return subject==="sansu" ? buildMathQuestions(grade,dateStr) : buildKokugoQuestions(grade,dateStr);
+    if(subject==="sansu") return buildMathQuestions(grade,dateStr);
+    if(subject==="kokugo") return buildKokugoQuestions(grade,dateStr);
+    if(subject==="rika") return buildFixedChoiceQuestions(rikaShakaiPools.rika, dateStr, "rika");
+    if(subject==="shakai") return buildFixedChoiceQuestions(rikaShakaiPools.shakai, dateStr, "shakai");
   }
 
   // ---------- state ----------
@@ -606,15 +696,28 @@
   let currentQuestions = [];
   let selections = {};
 
-  function subjColor(){ return state.subject==="kokugo" ? "var(--kokugo)" : "var(--sansu)"; }
+  function subjColor(){
+    if(state.subject==="kokugo") return "var(--kokugo)";
+    if(state.subject==="rika") return "var(--rika)";
+    if(state.subject==="shakai") return "var(--shakai)";
+    return "var(--sansu)";
+  }
+  function subjJaLabel(subject){
+    if(subject==="kokugo") return "こくご";
+    if(subject==="rika") return "りか";
+    if(subject==="shakai") return "しゃかい";
+    return "さんすう";
+  }
 
   async function render(){
     document.querySelectorAll(".tab-btn.grade").forEach(b=>b.classList.toggle("active", b.dataset.grade==String(state.grade)));
-    document.querySelectorAll(".tab-btn.kokugo,.tab-btn.sansu").forEach(b=>b.classList.toggle("active", b.dataset.subject===state.subject));
+    const grade4Only = document.querySelectorAll(".tab-btn.rika,.tab-btn.shakai");
+    grade4Only.forEach(b=>{ b.disabled = (state.grade!==4); });
+    document.querySelectorAll(".tab-btn.kokugo,.tab-btn.sansu,.tab-btn.rika,.tab-btn.shakai").forEach(b=>b.classList.toggle("active", b.dataset.subject===state.subject));
     document.getElementById("datePicker").value = state.date;
     const dObj = new Date(state.date+"T00:00:00");
     const wd = ["日","月","火","水","木","金","土"][dObj.getDay()];
-    document.getElementById("dateLabel").textContent = `${state.date}（${wd}）　${state.grade}年生・${state.subject==="kokugo"?"こくご":"さんすう"}`;
+    document.getElementById("dateLabel").textContent = `${state.date}（${wd}）　${state.grade}年生・${subjJaLabel(state.subject)}`;
 
     currentQuestions = buildQuestions(state.grade, state.subject, state.date);
     selections = {};
@@ -725,10 +828,19 @@
 
   // ---------- events ----------
   document.querySelectorAll(".tab-btn.grade").forEach(b=>{
-    b.addEventListener("click",()=>{ state.grade = Number(b.dataset.grade); render(); });
+    b.addEventListener("click",()=>{
+      state.grade = Number(b.dataset.grade);
+      if(state.grade===2 && (state.subject==="rika" || state.subject==="shakai")){
+        state.subject = "kokugo";
+      }
+      render();
+    });
   });
-  document.querySelectorAll(".tab-btn.kokugo,.tab-btn.sansu").forEach(b=>{
-    b.addEventListener("click",()=>{ state.subject = b.dataset.subject; render(); });
+  document.querySelectorAll(".tab-btn.kokugo,.tab-btn.sansu,.tab-btn.rika,.tab-btn.shakai").forEach(b=>{
+    b.addEventListener("click",()=>{
+      if(b.disabled) return;
+      state.subject = b.dataset.subject; render();
+    });
   });
   document.getElementById("datePicker").addEventListener("change",(e)=>{
     if(e.target.value){ state.date = e.target.value; render(); }
