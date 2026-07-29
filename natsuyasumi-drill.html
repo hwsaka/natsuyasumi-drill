@@ -221,6 +221,20 @@
     padding:14px 22px;
     line-height:1.1;
   }
+  .back-btn{
+    display:inline-block;
+    margin-top:16px;
+    font-family:"Zen Maru Gothic";
+    font-weight:700;
+    font-size:.62em;
+    text-decoration:none;
+    color:var(--ink);
+    background:#fff;
+    border:2px solid var(--paper-line);
+    border-radius:20px;
+    padding:8px 20px;
+  }
+  .back-btn:hover{border-color:var(--ink);}
 
   @media (max-width:520px){
     .mc-options{margin-left:0;}
@@ -568,18 +582,23 @@
   async function loadRecord(){
     const key = `record:${state.grade}:${state.subject}:${state.date}`;
     try{
-      const res = await window.storage.get(key,false);
-      return res ? JSON.parse(res.value) : null;
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
     }catch(e){ return null; }
   }
   async function saveRecord(rec){
     const key = `record:${state.grade}:${state.subject}:${state.date}`;
-    try{ await window.storage.set(key, JSON.stringify(rec), false); }catch(e){ console.error(e); }
+    try{ localStorage.setItem(key, JSON.stringify(rec)); }catch(e){ console.error(e); }
   }
   async function countCompleted(){
     try{
-      const res = await window.storage.list(`record:${state.grade}:${state.subject}:`, false);
-      return res && res.keys ? res.keys.length : 0;
+      const prefix = `record:${state.grade}:${state.subject}:`;
+      let count = 0;
+      for(let i=0;i<localStorage.length;i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith(prefix)) count++;
+      }
+      return count;
     }catch(e){ return 0; }
   }
 
@@ -686,7 +705,7 @@
     else if(score>=15) msg = "よくできました！";
     else if(score>=10) msg = "よくがんばったね！";
     else msg = "もういちど　やってみよう！";
-    el.innerHTML = `<div class="stamp">${score}／ 20<br><span style="font-size:.55em;">${msg}</span></div>`;
+    el.innerHTML = `<div class="stamp">${score}／ 20<br><span style="font-size:.55em;">${msg}</span></div><br><a class="back-btn" href="./index.html">トップへ もどる</a>`;
     requestAnimationFrame(()=>el.classList.add("show"));
   }
 
