@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>さくらの せつめい文ドリル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EC;
+    --paper-line:#E4DCC6;
+    --paper-fold:#F0E9D6;
+    --ink:#2C3B4E;
+    --ink-soft:#5B6B7C;
+    --main:#5B4B8A;
+    --main-soft:#E9E4F5;
+    --g3:#C98A3E;
+    --g3-soft:#F6E7CF;
+    --g4:#2A7F8E;
+    --g4-soft:#DCEEEF;
+    --stamp-red:#C8352C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 33px, var(--paper-line) 34px),
+      var(--paper);
+    font-family:"Zen Maru Gothic", sans-serif;
+    color:var(--ink);
+    padding-bottom:60px;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:20px 18px 40px;}
+  header{text-align:center;padding:18px 0 6px;}
+  header h1{
+    font-family:"Yomogi", cursive;
+    font-size:2.05em;
+    margin:0;
+    color:var(--ink);
+  }
+  header .sub{font-size:.92em;color:var(--ink-soft);margin-top:4px;line-height:1.6;}
+
+  .passage-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin:18px 0;
+  }
+  .pbtn{
+    border:2px solid var(--paper-line);
+    background:#fff;
+    border-radius:12px;
+    padding:8px 12px;
+    font-family:"Zen Maru Gothic";
+    font-weight:700;
+    font-size:.85em;
+    cursor:pointer;
+    color:var(--ink-soft);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    min-width:64px;
+  }
+  .pbtn .lv{
+    font-size:.72em;
+    font-weight:700;
+    padding:1px 7px;
+    border-radius:6px;
+    color:#fff;
+  }
+  .pbtn.lv3 .lv{background:var(--g3);}
+  .pbtn.lv4 .lv{background:var(--g4);}
+  .pbtn.active{border-color:var(--main);background:var(--main-soft);color:var(--ink);}
+  .pbtn .done{color:var(--stamp-red);font-weight:900;}
+
+  .progress{text-align:center;font-size:.88em;color:var(--ink-soft);margin-bottom:10px;}
+
+  .passage-card{
+    background:#fff;
+    border-radius:16px;
+    padding:20px 22px;
+    box-shadow:0 2px 0 var(--paper-line);
+    margin-bottom:16px;
+  }
+  .plevel{
+    display:inline-block;
+    font-size:.75em;
+    font-weight:700;
+    color:#fff;
+    padding:2px 10px;
+    border-radius:7px;
+    margin-bottom:8px;
+  }
+  .plevel.lv3{background:var(--g3);}
+  .plevel.lv4{background:var(--g4);}
+  .ptitle{font-family:"Yomogi";font-size:1.35em;margin:2px 0 12px;color:var(--ink);}
+  .pbody{font-size:1.06em;line-height:2.1;white-space:pre-wrap;}
+  .blank{
+    display:inline-block;
+    border:2px solid var(--main);
+    color:var(--main);
+    font-weight:700;
+    border-radius:6px;
+    padding:0 8px;
+    margin:0 2px;
+  }
+
+  .qcard{
+    background:#fff;
+    border-radius:14px;
+    padding:16px 18px;
+    box-shadow:0 2px 0 var(--paper-line);
+    margin-bottom:12px;
+    border-left:6px solid var(--main);
+  }
+  .qtag{
+    display:inline-block;
+    font-size:.72em;
+    font-weight:700;
+    color:#fff;
+    background:var(--main);
+    padding:1px 9px;
+    border-radius:6px;
+    margin-bottom:7px;
+  }
+  .qprompt{font-size:1.02em;margin-bottom:10px;line-height:1.6;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    text-align:left;
+    border:2px solid var(--paper-line);
+    background:#FFFDF6;
+    border-radius:10px;
+    padding:9px 14px;
+    font-family:"Zen Maru Gothic";
+    font-size:.98em;
+    cursor:pointer;
+    color:var(--ink);
+    transition:all .12s;
+  }
+  .opt:hover{border-color:var(--main);}
+  .opt.selected{border-color:var(--main);background:var(--main-soft);font-weight:700;}
+  .opt.correct{border-color:var(--stamp-red);background:#FFF3F1;color:var(--stamp-red);font-weight:700;}
+  .opt.wrong-selected{border-color:#9AA5AF;background:#F3F3F1;color:#7a848c;text-decoration:line-through;}
+  .opt[disabled]{cursor:default;}
+  .qmark{font-family:"Yomogi";font-weight:900;font-size:1.3em;margin-left:6px;}
+  .qmark.correct{color:var(--stamp-red);}
+  .qmark.wrong{color:#9AA5AF;}
+  .explain{
+    display:none;
+    margin-top:10px;
+    background:var(--main-soft);
+    border-radius:10px;
+    padding:10px 13px;
+    font-size:.9em;
+    color:var(--ink);
+    line-height:1.6;
+  }
+  .explain b{color:var(--main);}
+
+  footer{
+    max-width:780px;margin:20px auto 0;padding:0 18px;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .row-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .check-btn, .nav-btn{
+    font-family:"Yomogi";
+    font-size:1.15em;
+    color:#fff;
+    border:none;
+    padding:11px 30px;
+    border-radius:30px;
+    cursor:pointer;
+    box-shadow:0 3px 0 rgba(0,0,0,.15);
+  }
+  .check-btn{background:var(--main);}
+  .nav-btn{background:var(--ink-soft);}
+  .check-btn:disabled{background:#c8c8c8;box-shadow:none;cursor:default;}
+
+  .result{
+    position:relative;text-align:center;font-family:"Yomogi";font-size:1.4em;color:var(--ink);
+    opacity:0;transform:scale(.7) rotate(-6deg);
+    transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .result.show{opacity:1;transform:scale(1) rotate(-4deg);}
+  .stamp{
+    display:inline-block;border:4px solid var(--stamp-red);color:var(--stamp-red);
+    border-radius:50%;padding:12px 20px;line-height:1.1;
+  }
+
+  @media (max-width:560px){
+    header h1{font-size:1.6em;}
+    .passage-card,.qcard{padding:14px 15px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>さくらの　せつめい文ドリル</h1>
+    <div class="sub">3年生の　ふくしゅうと　4年生の　文章を　まぜた、せつめい文とくべつれんしゅう。<br>接続語・指示語・内ようの読みとり・要旨（ようし）に　なれよう。</div>
+  </header>
+
+  <div class="passage-nav" id="passageNav"></div>
+  <div class="progress" id="progress"></div>
+
+  <div id="passageArea"></div>
+
+  <footer>
+    <div class="row-btns">
+      <button class="nav-btn" id="prevBtn">← まえの文章</button>
+      <button class="check-btn" id="checkBtn">こたえあわせ</button>
+      <button class="nav-btn" id="nextBtn">つぎの文章 →</button>
+    </div>
+    <div class="result" id="result"></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const PASSAGES = [
+    {
+      id:"p1", level:3, title:"ありの行列",
+      body:"公園を歩いていると、アリが一列にならんで歩いているのを見ることがあります。アリは、えさを見つけると、体から「フェロモン」というにおいのする物しつを出しながら、巣に帰ります。【1】、あとから来た他のアリは、このにおいをたどって、同じ道を歩きます。こうして、たくさんのアリが同じ道を通るようになり、行列ができるのです。もし、道のとちゅうに石などのじゃまが置かれると、アリたちはにおいのある新しい道を作り、また行列を作ります。",
+      questions:[
+        {tag:"接続語", prompt:"【1】に入る言葉として、正しいものを選びましょう。",
+          options:["だから","しかし","たとえば","または"], answer:0,
+          explain:"「においを出しながら帰る」→（だから）「あとのアリがにおいをたどる」という、原因と結果のつながりなので「だから」が入ります。"},
+        {tag:"指示語", prompt:"「このにおい」とは、何のにおいのことですか。",
+          options:["アリの体そのもののにおい","花のにおい","アリが出すフェロモンのにおい","土のにおい"], answer:2,
+          explain:"直前の文で「体からフェロモンというにおいのする物しつを出しながら」とあるので、「このにおい」＝フェロモンのにおいです。指示語の前を見ると答えが見つかります。"},
+        {tag:"内ようの読みとり", prompt:"道にじゃまなものが置かれると、アリはどうしますか。",
+          options:["行列をやめてしまう","新しいにおいの道を作る","エサをさがすのをやめる","その場から動かなくなる"], answer:1,
+          explain:"文章の最後に「アリたちはにおいのある新しい道を作り、また行列を作ります」と書かれています。"},
+        {tag:"要旨", prompt:"この文章が一番伝えたいことは何ですか。",
+          options:["アリは石が苦手だ","アリはにおいを道しるべにして行列を作る","アリは公園にしかいない","アリは一ぴきで行動する"], answer:1,
+          explain:"文章全体は「フェロモンのにおいをたよりに、アリが同じ道を通ることで行列ができる」という仕組みを説明しています。"}
+      ]
+    },
+    {
+      id:"p2", level:3, title:"チョウの一生",
+      body:"モンシロチョウは、たまご→よう虫→さなぎ→成虫という順番で育ちます。たまごから出てきたよう虫は、キャベツなどの葉をたくさん食べて大きくなります。【1】、よう虫は皮をぬぎながら大きくなり、やがてさなぎになります。さなぎの間は何も食べず、じっとしていますが、体の中では大きな変化が起きています。そして、さなぎの中から羽を持った成虫が出てきます。",
+      questions:[
+        {tag:"接続語", prompt:"【1】に入る言葉として、正しいものを選びましょう。",
+          options:["そして","しかし","なぜなら","つまり"], answer:0,
+          explain:"「葉を食べて大きくなる」ことに続けて、次のできごと（皮をぬいで大きくなる）を順番につないでいるので「そして」が入ります。"},
+        {tag:"指示語", prompt:"「さなぎの間」とは、どんな時期のことですか。",
+          options:["たまごの時期","よう虫として葉を食べる時期","さなぎとしてじっとしている時期","成虫になってからの時期"], answer:2,
+          explain:"「さなぎの間」という言葉自体が「さなぎでいる時期」を指しています。直後に「何も食べず、じっとしています」と説明があります。"},
+        {tag:"内ようの読みとり", prompt:"さなぎの間、チョウはどんな様子ですか。",
+          options:["葉をたくさん食べる","何も食べずじっとしている","飛び回っている","たまごを産んでいる"], answer:1,
+          explain:"文章に「さなぎの間は何も食べず、じっとしています」とはっきり書かれています。"},
+        {tag:"要旨", prompt:"この文章の内容として正しいものはどれですか。",
+          options:["チョウはたまごから成虫まで4つのすがたに変化する","チョウはさなぎにならずに成虫になる","チョウはよう虫のときが一番小さい","チョウはずっと同じすがたのままである"], answer:0,
+          explain:"最初の一文「たまご→よう虫→さなぎ→成虫という順番で育ちます」が文章全体の要点です。"}
+      ]
+    },
+    {
+      id:"p3", level:4, title:"森林の役わり",
+      body:"森林には、木の根が土をしっかりとつかんでいるため、雨がふっても土が流されにくいというはたらきがあります。また、森林の土は、スポンジのように雨水をたくわえることができます。【1】、大雨がふっても、水が一気に川に流れこまず、こう水を防ぐことにつながります。たくわえられた水は、少しずつ川に流れ出て、晴れた日が続いても川の水が完全にかれてしまうのを防いでいます。このように、森林は「緑のダム」と呼ばれることがあります。",
+      questions:[
+        {tag:"接続語", prompt:"【1】に入る言葉として、正しいものを選びましょう。",
+          options:["だから","しかし","たとえば","つまり"], answer:0,
+          explain:"「土がスポンジのように雨水をたくわえる」→（だから）「大雨でも一気に川に流れこまない」という原因と結果の関係です。"},
+        {tag:"指示語", prompt:"「このように」とは、どのようなはたらきを指していますか。",
+          options:["森林が木材を生産するはたらき","森林が雨水をたくわえ、こう水や水不足を防ぐはたらき","森林が動物のすみかになるはたらき","森林が酸素を作るはたらき"], answer:1,
+          explain:"「このように」は、それまでの文章全体（雨水をたくわえてこう水を防ぎ、水不足も防ぐこと）をまとめている言葉です。"},
+        {tag:"内ようの読みとり", prompt:"森林の土が持つはたらきとして、文章に書かれているものはどれですか。",
+          options:["雨水を素通りさせる","雨水をスポンジのようにたくわえる","雨水をすべてはじく","雨水を蒸発させてなくす"], answer:1,
+          explain:"「森林の土は、スポンジのように雨水をたくわえることができます」と書かれています。"},
+        {tag:"要旨", prompt:"この文章が説明しているのは、どんなことですか。",
+          options:["森林が「緑のダム」として水を調整するはたらき","森林で育つ木の種類","森林の広さの世界一","森林で働く人の仕事"], answer:0,
+          explain:"文章全体を通して、森林が雨水をたくわえ、こう水や水不足を防ぐ「緑のダム」としてのはたらきが説明されています。"}
+      ]
+    },
+    {
+      id:"p4", level:4, title:"リサイクルの仕組み",
+      body:"わたしたちが出したごみの中には、もう一度資源として使えるものがあります。たとえば、使い終わったペットボトルは、細かくくだかれてせんいになり、新しい服や文ぼう具などに生まれ変わります。【1】、アルミかんは、とかしてもう一度アルミの材料にもどすことができ、何度でもくり返し使うことができます。このように、ごみを正しく分別することで、資源を無駄にせず、ごみの量を減らすことにつながります。",
+      questions:[
+        {tag:"接続語", prompt:"【1】に入る言葉として、正しいものを選びましょう。",
+          options:["また","しかし","なぜなら","たとえば"], answer:0,
+          explain:"「たとえば」ペットボトルの例のあと、（また）アルミかんの例をつけ加えているので「また」が入ります。同じ働きの言葉を続けて使わない点に注意しましょう。"},
+        {tag:"指示語", prompt:"「このように」は、どんな内容をまとめていますか。",
+          options:["ごみを燃やして電気を作ること","ペットボトルやアルミかんが資源として生まれ変わること","ごみを埋め立てること","ごみを海に捨てること"], answer:1,
+          explain:"直前の2つの例（ペットボトル・アルミかんのリサイクル）をまとめて「このように」と受けています。"},
+        {tag:"内ようの読みとり", prompt:"アルミかんは、リサイクルされるとどうなりますか。",
+          options:["そのまま新しいかんとして売られる","とかされて、もう一度アルミの材料にもどる","燃やされて灰になる","紙にすがたを変える"], answer:1,
+          explain:"「アルミかんは、とかしてもう一度アルミの材料にもどすことができ」と書かれています。"},
+        {tag:"要旨", prompt:"この文章が一番伝えたいことは何ですか。",
+          options:["ごみは全部燃やすべきだ","正しく分別すれば、ごみは資源として生まれ変わる","ペットボトルはリサイクルできない","アルミかんは一度しか使えない"], answer:1,
+          explain:"最後の一文「ごみを正しく分別することで、資源を無駄にせず、ごみの量を減らすことにつながります」が要旨です。"}
+      ]
+    },
+    {
+      id:"p5", level:4, title:"なぜ夏は暑く感じるのか",
+      body:"夏になると気温が上がるだけでなく、じめじめとした暑さを感じることがあります。これは、空気中の水分の量、つまり「しつ度」が関係しています。人は、汗をかいて、その汗が蒸発するときに体の熱をうばうことで体温を下げています。【1】、しつ度が高いと、汗がかわきにくくなり、体の熱をうまく逃がすことができません。そのため、気温がそれほど高くなくても、しつ度が高い日は、より暑く感じてしまうのです。",
+      questions:[
+        {tag:"接続語", prompt:"【1】に入る言葉として、正しいものを選びましょう。",
+          options:["しかし","だから","たとえば","つまり"], answer:0,
+          explain:"「汗が蒸発して体温が下がる」という通常のしくみに対して、（しかし）「しつ度が高いと汗がかわきにくい」と反対の内容が続くので「しかし」が入ります。"},
+        {tag:"指示語", prompt:"「これ」は、何を指していますか。",
+          options:["夏になると気温が上がること","夏にじめじめとした暑さを感じること","汗をかくこと","しつ度が下がること"], answer:1,
+          explain:"「これ」は直前の文「じめじめとした暑さを感じることがあります」を指しています。指示語は基本的に直前の内容を受けます。"},
+        {tag:"内ようの読みとり", prompt:"汗が体温を下げるのは、どうしてですか。",
+          options:["汗が体を冷たい水でぬらすから","汗が蒸発するときに体の熱をうばうから","汗が体の中の水分を増やすから","汗が体を軽くするから"], answer:1,
+          explain:"「その汗が蒸発するときに体の熱をうばうことで体温を下げています」とはっきり書かれています。"},
+        {tag:"要旨", prompt:"この文章が説明しているのは、どんなことですか。",
+          options:["気温としつ度が、体感する暑さに関係していること","夏には必ず雨がふること","汗をかかない人がいること","しつ度は季節に関係ないこと"], answer:0,
+          explain:"文章全体で、気温だけでなく「しつ度」が暑さの感じ方に関係していることを説明しています。"}
+      ]
+    },
+    {
+      id:"p6", level:4, title:"昔の道具と今の道具",
+      body:"昔の人たちは、せんたくをするとき、川の水を使い、せんたく板とせっけんで、手で布をこすってよごれを落としていました。時間も体力も、たくさん必要な作業でした。【1】、今では、せんたく機のスイッチを入れるだけで、水くみからよごれ落とし、だっ水までを、自動で行ってくれます。道具が進歩したことで、家事にかかる時間は大きく短くなり、人々はその時間を、仕事や休息など、ほかのことに使えるようになりました。",
+      questions:[
+        {tag:"接続語", prompt:"【1】に入る言葉として、正しいものを選びましょう。",
+          options:["それに対して","しかし","なぜなら","たとえば"], answer:0,
+          explain:"「昔のせんたく」と「今のせんたく」を対比しているので、比べる働きを持つ「それに対して」が入ります。"},
+        {tag:"指示語", prompt:"「その時間」とは、何をさしていますか。",
+          options:["せんたく板を使っていたころの時間","せんたく機によって短くなった、家事にかかっていた時間","川に水をくみに行く時間","せんたく機を作る時間"], answer:1,
+          explain:"直前の「家事にかかる時間は大きく短くなり」を受けて、短くなって浮いた時間を「その時間」と表しています。"},
+        {tag:"内ようの読みとり", prompt:"昔のせんたくの様子として、文章に書かれているものはどれですか。",
+          options:["せんたく機を使っていた","川の水とせんたく板で手作業をしていた","クリーニング店に出していた","せんたくをしなかった"], answer:1,
+          explain:"「川の水を使い、せんたく板とせっけんで、手で布をこすって」と書かれています。"},
+        {tag:"要旨", prompt:"この文章が一番伝えたいことは何ですか。",
+          options:["せんたく板は今でも一番べんりだ","道具の進歩によって、家事の時間が短くなり、生活が変わった","昔の人はせんたくをしなかった","せんたく機は昔からあった"], answer:1,
+          explain:"文章全体で、道具の進歩（せんたく板→せんたく機）が家事の時間や暮らし方を変えたことを説明しています。"}
+      ]
+    }
+  ];
+
+  let current = 0;
+  let selections = {}; // {qIndex: optionIndex}
+  let checked = false;
+
+  function levelLabel(lv){ return lv===3 ? "3年生の復習" : "4年生"; }
+  function levelClass(lv){ return lv===3 ? "lv3" : "lv4"; }
+
+  async function loadRecord(id){
+    try{
+      const raw = localStorage.getItem(`sakura-setsumeibun:${id}`);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+  async function saveRecord(id, rec){
+    try{ localStorage.setItem(`sakura-setsumeibun:${id}`, JSON.stringify(rec)); }catch(e){ console.error(e); }
+  }
+  async function allRecords(){
+    const out = {};
+    try{
+      const prefix = "sakura-setsumeibun:";
+      for(let i=0;i<localStorage.length;i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith(prefix)){
+          try{ out[k.replace(prefix,"")] = JSON.parse(localStorage.getItem(k)); }catch(e){}
+        }
+      }
+    }catch(e){}
+    return out;
+  }
+
+  function renderNav(records){
+    const nav = document.getElementById("passageNav");
+    nav.innerHTML = "";
+    PASSAGES.forEach((p,i)=>{
+      const btn = document.createElement("button");
+      btn.className = "pbtn "+levelClass(p.level)+(i===current?" active":"");
+      const rec = records[p.id];
+      btn.innerHTML = `<span class="lv">${levelLabel(p.level)}</span><span>${p.title}</span>${rec?`<span class="done">${rec.score}／4 ✓</span>`:""}`;
+      btn.addEventListener("click", ()=>{ current=i; selections={}; checked=false; render(); });
+      nav.appendChild(btn);
+    });
+  }
+
+  async function render(){
+    const records = await allRecords();
+    renderNav(records);
+    const done = Object.keys(records).length;
+    document.getElementById("progress").textContent = `${done} ／ ${PASSAGES.length} の文章が　おわったよ`;
+
+    const p = PASSAGES[current];
+    const area = document.getElementById("passageArea");
+    let bodyHtml = p.body.replace(/【(\d+)】/g, (m,n)=>`<span class="blank">（　${n}　）</span>`);
+
+    let qsHtml = "";
+    p.questions.forEach((q,qi)=>{
+      qsHtml += `
+      <div class="qcard" data-qi="${qi}">
+        <span class="qtag">${q.tag}</span>
+        <div class="qprompt">${q.prompt}</div>
+        <div class="options">
+          ${q.options.map((opt,oi)=>`<button class="opt" data-qi="${qi}" data-oi="${oi}">${opt}</button>`).join("")}
+        </div>
+        <div class="explain" data-qi="${qi}"><b>解説：</b>${q.explain}</div>
+      </div>`;
+    });
+
+    area.innerHTML = `
+      <div class="passage-card">
+        <span class="plevel ${levelClass(p.level)}">${levelLabel(p.level)}</span>
+        <div class="ptitle">${p.title}</div>
+        <div class="pbody">${bodyHtml}</div>
+      </div>
+      ${qsHtml}
+    `;
+
+    area.querySelectorAll(".opt").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        if(checked) return;
+        const qi = Number(btn.dataset.qi);
+        selections[qi] = Number(btn.dataset.oi);
+        area.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+    });
+
+    document.getElementById("result").className = "result";
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("checkBtn").disabled = false;
+
+    const rec = records[p.id];
+    if(rec && rec.selections){
+      selections = {...rec.selections};
+      applyGrading(rec.selections, rec.score);
+    }
+  }
+
+  function applyGrading(sel, score){
+    checked = true;
+    const p = PASSAGES[current];
+    p.questions.forEach((q,qi)=>{
+      const card = document.querySelector(`.qcard[data-qi="${qi}"]`);
+      const chosen = sel[qi];
+      card.querySelectorAll(".opt").forEach((btn,oi)=>{
+        btn.disabled = true;
+        if(oi===q.answer) btn.classList.add("correct");
+        else if(oi===chosen) btn.classList.add("wrong-selected");
+      });
+      card.querySelector(".explain").style.display = "block";
+    });
+    showResult(score);
+  }
+
+  function showResult(score){
+    const el = document.getElementById("result");
+    let msg;
+    if(score===4) msg = "パーフェクト！　よく読みとれたね！";
+    else if(score>=3) msg = "よくできました！";
+    else if(score>=2) msg = "おしい！　解説を読んで、もう一度たしかめよう。";
+    else msg = "解説をよく読んで、もう一度チャレンジしてみよう。";
+    el.innerHTML = `<div class="stamp">${score}／ 4<br><span style="font-size:.6em;">${msg}</span></div>`;
+    requestAnimationFrame(()=>el.classList.add("show"));
+  }
+
+  async function handleCheck(){
+    const p = PASSAGES[current];
+    if(Object.keys(selections).length < p.questions.length){
+      alert("すべての問題に、こたえを選んでから「こたえあわせ」を押してね。");
+      return;
+    }
+    let score = 0;
+    p.questions.forEach((q,qi)=>{ if(selections[qi]===q.answer) score++; });
+    applyGrading(selections, score);
+    document.getElementById("checkBtn").disabled = true;
+    await saveRecord(p.id, {selections, score, total:4});
+    render();
+  }
+
+  document.getElementById("checkBtn").addEventListener("click", handleCheck);
+  document.getElementById("prevBtn").addEventListener("click", ()=>{
+    current = (current-1+PASSAGES.length)%PASSAGES.length;
+    selections={}; checked=false; render();
+  });
+  document.getElementById("nextBtn").addEventListener("click", ()=>{
+    current = (current+1)%PASSAGES.length;
+    selections={}; checked=false; render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
