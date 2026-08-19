@@ -417,13 +417,13 @@
       return {label:"ひきざん", prompt:`${a} － ${b} ＝`, answer:String(a-b)}; },
     rng=>{ const a=randInt(rng,30,99); const b=randInt(rng,10,Math.min(a-1,29));
       return {label:"ひきざん（くり下がり）", prompt:`${a} － ${b} ＝`, answer:String(a-b)}; },
-    rng=>{ const a=randInt(rng,2,9), b=randInt(rng,2,9);
+    rng=>{ const a=randInt(rng,3,18), b=randInt(rng,3,18);
       return {label:"文しょうだい", prompt:`赤い花が ${a}本、白い花が ${b}本 さいています。あわせて なん本ですか。`, answer:String(a+b)}; },
-    rng=>{ const a=randInt(rng,10,20), b=randInt(rng,1,9);
+    rng=>{ const a=randInt(rng,10,30), b=randInt(rng,1,Math.min(9,a-1));
       return {label:"文しょうだい", prompt:`いろがみが ${a}まい ありました。${b}まい つかいました。のこりは なんまいですか。`, answer:String(a-b)}; },
-    rng=>{ const a=randInt(rng,15,30); const b=randInt(rng,1,a-1);
+    rng=>{ const a=randInt(rng,15,45); const b=randInt(rng,1,a-1);
       return {label:"文しょうだい（長さ）", prompt:`テープが ${a}cm ありました。${b}cm 切りとりました。のこりは 何cmですか。`, answer:String(a-b)}; },
-    rng=>{ const a=randInt(rng,20,40); const b=randInt(rng,5,Math.min(25,a-1));
+    rng=>{ const a=randInt(rng,20,60); const b=randInt(rng,5,Math.min(35,a-1));
       return {label:"文しょうだい", prompt:`バスに ${a}人 のっていました。バスていで ${b}人 おりました。のこりは なん人ですか。`, answer:String(a-b)}; },
   ];
 
@@ -505,6 +505,21 @@
     oppositeQ("多い","少ない",["すくない"]),
     oppositeQ("新しい","古い",["ふるい"]),
     oppositeQ("重い","軽い",["かるい"]),
+    readingQ("図工","ずこう","図工の時間に、絵をかいた。"),
+    readingQ("昼食","ちゅうしょく","お昼に、みんなで昼食を食べた。"),
+    readingQ("晴天","せいてん","今日は気持ちのよい晴天だ。"),
+    readingQ("汽船","きせん","汽船に乗って、海をわたる。"),
+    readingQ("白鳥","はくちょう","冬になると、白鳥が湖にやってくる。"),
+    readingQ("手紙","てがみ","遠くに住む友だちに手紙を書く。"),
+    readingQ("番組","ばんぐみ","すきなテレビ番組を見る。"),
+    readingQ("里山","さとやま","里山で、たくさんの虫をつかまえた。"),
+    writingQ("せいてん","晴天"),
+    writingQ("てがみ","手紙"),
+    writingQ("ばんぐみ","番組"),
+    writingQ("さとやま","里山"),
+    oppositeQ("太い","細い",["ほそい"]),
+    oppositeQ("遠い","近い",["ちかい"]),
+    oppositeQ("早い","遅い",["おそい"]),
   ];
 
   const kokugoGrade4 = [
@@ -541,6 +556,21 @@
     oppositeQ("賛成","反対",["はんたい"]),
     oppositeQ("増加","減少",["げんしょう"]),
     oppositeQ("複雑","単純",["たんじゅん"]),
+    readingQ("材料","ざいりょう","料理の材料を買いに行く。"),
+    readingQ("貨物","かもつ","貨物列車が、長い車両を引いて走る。"),
+    readingQ("産地","さんち","この野菜の産地を調べる。"),
+    readingQ("未定","みてい","明日の予定は、まだ未定です。"),
+    readingQ("巣箱","すばこ","庭の木に、鳥のための巣箱をかけた。"),
+    readingQ("望遠鏡","ぼうえんきょう","望遠鏡を使って、夜空の星を見る。"),
+    readingQ("材木","ざいもく","トラックが、材木を運んでいる。"),
+    readingQ("便利","べんり","駅の近くは、買い物にとても便利だ。"),
+    writingQ("さんち","産地"),
+    writingQ("べんり","便利"),
+    writingQ("ざいりょう","材料"),
+    writingQ("かもつ","貨物"),
+    oppositeQ("便利","不便",["ふべん"]),
+    oppositeQ("出発","到着",["とうちゃく"]),
+    oppositeQ("深い","浅い",["あさい"]),
   ];
 
   const kokugoPools = {2:kokugoGrade2, 4:kokugoGrade4};
@@ -579,6 +609,21 @@
     mcQ("骨と筋肉", "人が体を動かせるのは、骨のまわりについている何のはたらきによるものですか。", ["筋肉","血管","皮ふ","つめ"], "筋肉"),
     mcQ("骨と筋肉", "心ぞうを守るはたらきをしている、むねのあたりの骨を何といいますか。", ["ろっ骨（肋骨）","うでの骨","あしの骨","背骨だけ"], "ろっ骨（肋骨）"),
     mcQ("季節と生き物", "ツバメのように、春から夏にかけて日本にやってきて子育てをする鳥を何と呼びますか。", ["夏鳥","冬鳥","留鳥","渡らない鳥"], "夏鳥"),
+    mcQ("季節と生き物", "植物を観察するとき、虫めがねで太陽を直接見てはいけないのはなぜですか。", ["目をいためてしまうから","虫めがねがこわれるから","暑くなるから","太陽が消えてしまうから"], "目をいためてしまうから"),
+    mcQ("季節と生き物", "ヘチマのくきの長さなど、のびていく様子をはかるときによく使う道具はどれですか。", ["ものさし（巻き尺）","温度計","方位磁針","双眼鏡"], "ものさし（巻き尺）"),
+    mcQ("季節と生き物", "春から初夏に見られるオタマジャクシは、どの生き物のよう虫ですか。", ["カエル","メダカ","トンボ","アリ"], "カエル"),
+    mcQ("天気と気温", "気温をはかるときに使う道具は何ですか。", ["温度計","虫めがね","方位磁針","双眼鏡"], "温度計"),
+    mcQ("天気と気温", "雨やくもりの日と、晴れの日をくらべると、1日の気温の変化が小さいのはどちらですか。", ["雨（くもり）の日","晴れの日","変わらない","決まっていない"], "雨（くもり）の日"),
+    mcQ("天気と気温", "百葉箱（ひゃくようばこ）の中に温度計を置く主な理由は何ですか。", ["直射日光や雨風をさけて正確にはかるため","かっこいいから","風を防ぐだけのため","雨水をためるため"], "直射日光や雨風をさけて正確にはかるため"),
+    mcQ("とじこめた空気と水", "空気でっぽうの後玉をおしていくと、玉が飛び出す直前、筒の中の空気はどうなっていますか。", ["おしちぢめられて、もとにもどろうとする力が強くなっている","空気がなくなっている","水に変わっている","冷たくなっている"], "おしちぢめられて、もとにもどろうとする力が強くなっている"),
+    mcQ("とじこめた空気と水", "とじこめた空気と水をくらべると、おしちぢめられやすいのはどちらですか。", ["空気","水","どちらも同じ","どちらもちぢまない"], "空気"),
+    mcQ("とじこめた空気と水", "水鉄砲で水をおし出すとき、水そのものはおしちぢめられますか。", ["ほとんどおしちぢめられない","大きくおしちぢめられる","気体になる","こおる"], "ほとんどおしちぢめられない"),
+    mcQ("電気の回路", "回路の中に、電気を通さないもの（ガラスやゴムなど）をつなぐとどうなりますか。", ["電気が流れず豆電球がつかない","電気が2倍流れる","豆電球が明るくなる","かん電池が増える"], "電気が流れず豆電球がつかない"),
+    mcQ("電気の回路", "かん電池の＋極と－極を、豆電球を通さずどう線だけで直接つなぐとどうなりますか。", ["ショート回路になり危険","一番安全なつなぎ方になる","豆電球がとても明るくなる","何も起こらない"], "ショート回路になり危険"),
+    mcQ("電気の回路", "モーターをより速く回すには、かん電池をどのようにつなぐとよいですか。", ["2こを直列につなぐ","1こだけつなぐ","かん電池を使わない","導線を長くする"], "2こを直列につなぐ"),
+    mcQ("骨と筋肉", "うでを曲げたりのばしたりできるのは、骨や筋肉のほかに、どんなつくりがあるからですか。", ["関節","血液","皮ふ","つめ"], "関節"),
+    mcQ("骨と筋肉", "せなかにあって、体を支えたり神経を通したりする大切な骨を何といいますか。", ["背骨","ろっ骨","うでの骨","あごの骨"], "背骨"),
+    mcQ("骨と筋肉", "筋肉のはたらきとして正しいものはどれですか。", ["ちぢんだりゆるんだりして骨を動かす","血液をつくる","食べ物をきざむ","音を聞く"], "ちぢんだりゆるんだりして骨を動かす"),
   ];
 
   // ---------- しゃかい（4年生 1学期の範囲） ----------
@@ -606,6 +651,29 @@
     mcQ("地図の基礎", "地図で、土地の高さが同じところを結んだ線を何といいますか。", ["等高線","緯線","経線","境界線"], "等高線"),
     mcQ("地図の基礎", "地図の上で、ふつう上の方はどの方角を指しますか。", ["北","南","東","西"], "北"),
     mcQ("地図の基礎", "地図で、実際のきょりを縮めて表した割合を何といいますか。", ["縮尺","等高線","方位","凡例"], "縮尺"),
+    mcQ("都道府県", "都道府県のうち、「都」がつくのはどこですか。", ["東京都","大阪府","京都府","北海道"], "東京都"),
+    mcQ("都道府県", "都道府県のうち、「道」がつくのはどこですか。", ["北海道","東京都","大阪府","京都府"], "北海道"),
+    mcQ("都道府県", "近畿地方にふくまれる都道府県はどれですか。", ["京都府","福岡県","宮城県","静岡県"], "京都府"),
+    mcQ("都道府県", "関東地方にふくまれない県はどれですか。", ["福岡県","埼玉県","千葉県","神奈川県"], "福岡県"),
+    mcQ("福岡県のようす", "福岡県でとれる魚介類を使った加工品として全国的に有名なものはどれですか。", ["明太子","りんごジャム","かにみそ","ホタテ"], "明太子"),
+    mcQ("福岡県のようす", "福岡県にある大きな空港はどれですか。", ["福岡空港","羽田空港","関西空港","新千歳空港"], "福岡空港"),
+    mcQ("福岡県のようす", "博多どんたくや博多祇園山笠などのお祭りがさかんな都市はどこですか。", ["福岡市","北九州市","久留米市","大牟田市"], "福岡市"),
+    mcQ("福岡県のようす", "福岡県は、九州地方の中でどのあたりに位置していますか。", ["北部","南部","西のはし","九州の外側"], "北部"),
+    mcQ("ごみの処理", "新聞紙や古紙のように、資源ごみとして分別されることが多いものはどれですか。", ["新聞紙・古紙","生ごみ","われたガラス（危険物）","使い切ったスプレーかん"], "新聞紙・古紙"),
+    mcQ("ごみの処理", "ごみをできるだけ出さないようにする取り組みを何といいますか。", ["ごみの減量","リサイクル","しょ理","回収"], "ごみの減量"),
+    mcQ("ごみの処理", "3R（スリーアール）のうち、「使い終わったものをそのままの形でくり返し使う」ことを何といいますか。", ["リユース","リデュース","リサイクル","リフューズ"], "リユース"),
+    mcQ("水とくらし", "ダムの主な役わりとして正しいものはどれですか。", ["水をたくわえ、こう水を防いだり生活用水を供給したりする","電気だけを作る","魚をとるため","船を通すためだけ"], "水をたくわえ、こう水を防いだり生活用水を供給したりする"),
+    mcQ("水とくらし", "下水処理場のはたらきとして正しいものはどれですか。", ["よごれた水をきれいにしてから川や海に流す","水道の水をつくる","ごみを燃やす","電気をつくる"], "よごれた水をきれいにしてから川や海に流す"),
+    mcQ("地図の基礎", "地図の中で、道路や建物などいろいろな種類を表すために使われる記号を何といいますか。", ["地図記号","等高線","縮尺","方位記号"], "地図記号"),
+    mcQ("地図の基礎", "地図のすみなどに書かれている、地図記号の意味をまとめたものを何といいますか。", ["凡例","縮尺","等高線","方位"], "凡例"),
+    mcQ("都道府県", "都道府県の中で、海に面していない「内陸県」はどれですか。", ["埼玉県","福岡県","千葉県","宮城県"], "埼玉県"),
+    mcQ("都道府県", "九州地方にある県の数はいくつですか（沖縄県をふくむ）。", ["8","6","7","9"], "8"),
+    mcQ("都道府県", "海に面していない8つの県のことを何といいますか。", ["内陸県","海岸県","半島県","島しょ県"], "内陸県"),
+    mcQ("福岡県のようす", "福岡県で生産がさかんな果物として知られているものはどれですか。", ["いちご（あまおう）","りんご","さくらんぼ","みかん"], "いちご（あまおう）"),
+    mcQ("ごみの処理", "都道府県や市区町村（地方公共団体）の仕事として正しいものはどれですか。", ["ごみの収集や道路の整備など住民の生活を支える","外国との貿易だけを行う","全国のニュースを作る","裁判を行う"], "ごみの収集や道路の整備など住民の生活を支える"),
+    mcQ("水とくらし", "浄水場で行っていることとして正しくないものはどれですか。", ["石油をつくる","にごりを取りのぞく","消毒する","安全かどうか検査する"], "石油をつくる"),
+    mcQ("ごみの処理", "しゅう集車が集めた「もえるごみ」は、主にどこに運ばれますか。", ["清掃工場","浄水場","下水処理場","市役所"], "清掃工場"),
+    mcQ("地図の基礎", "地図で、北の反対の方角はどこですか。", ["南","東","西","北東"], "南"),
   ];
   const rikaShakaiPools = {rika:rikaGrade4, shakai:shakaiGrade4};
 
@@ -616,37 +684,73 @@
     const rng = makeRng(dateStr,grade,"sansu");
     const gens = mathGens[grade];
     const qs=[];
-    for(let i=0;i<20;i++){
+    const seenPrompts = new Set(); // 同じ問題文が1日の中で重ならないようにする
+    let guard=0;
+    while(qs.length<20 && guard<500){
+      guard++;
       const g = pick(rng,gens);
       const q = g(rng);
+      if(seenPrompts.has(q.prompt)) continue; // 同じ問題が出たら作り直す
+      seenPrompts.add(q.prompt);
       const {options, correctIndex} = buildChoicesForMath(rng, q);
       qs.push({label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex});
     }
     return qs;
   }
+
+  // ---------- 日をまたいでも問題がかぶりにくい「シャッフルの束」方式 ----------
+  // pool全体を出題数(20)ずつのまとまりに区切ってシャッフルし、1サイクルの間（pool内の全問を
+  // 出し切るまでの日数）は同じ問題が2度出ないようにする。サイクルが一周したら、ちがう順番で
+  // もう一度シャッフルして次のサイクルに入る。
+  function selectFromPoolNoRepeat(pool, dateStr, grade, subjectKey){
+    const perDay = 20;
+    const daysPerCycle = Math.max(1, Math.ceil(pool.length/perDay));
+    const dayIdx = daysSinceEpoch(dateStr);
+    const cycleNum = Math.floor(dayIdx/daysPerCycle);
+    const posInCycle = dayIdx%daysPerCycle;
+
+    const deck = shuffle(makeRng("cyc"+cycleNum, grade, subjectKey), pool);
+    let selected = deck.slice(posInCycle*perDay, posInCycle*perDay+perDay);
+
+    if(selected.length<perDay){
+      // サイクルの最後の日で問題数が足りないときは、同じサイクルの中からおぎなう
+      // （次のサイクルの1日目から借りると、そこと丸かぶりしてしまうため）
+      const priorItems = new Set(deck.slice(0, posInCycle*perDay));
+      const have = new Set(selected);
+      const fillRng = makeRng("cyc"+cycleNum+"-fill", grade, subjectKey);
+      // まず、同じサイクルの他の日ともかぶらない候補から優先的に埋める
+      const freshCandidates = shuffle(fillRng, pool.filter(item=>!have.has(item) && !priorItems.has(item)));
+      for(const item of freshCandidates){
+        if(selected.length>=perDay) break;
+        selected.push(item); have.add(item);
+      }
+      // それでも足りない場合（プールがperDay×日数より小さいときなど）は、
+      // 同じサイクルの中からやむを得ず再利用して必ず20問そろえる
+      if(selected.length<perDay){
+        const fallbackCandidates = shuffle(fillRng, pool.filter(item=>!have.has(item)));
+        for(const item of fallbackCandidates){
+          if(selected.length>=perDay) break;
+          selected.push(item); have.add(item);
+        }
+      }
+    }
+    // 表示の並び順は日付ごとに変える
+    return shuffle(makeRng(dateStr, grade, subjectKey+":order"), selected);
+  }
+
   function buildKokugoQuestions(grade,dateStr){
     const pool = kokugoPools[grade];
-    const dayIdx = daysSinceEpoch(dateStr);
-    const step = 7;
-    const start = ((dayIdx*step)%pool.length+pool.length)%pool.length;
-    const rotated = pool.slice(start).concat(pool.slice(0,start));
-    const rng = makeRng(dateStr,grade,"kokugo");
-    const chosen = shuffle(rng, rotated.slice(0, Math.min(20,pool.length)));
-    while(chosen.length<20){ chosen.push(pick(rng,pool)); }
-    return chosen.slice(0,20).map(q=>{
-      const {options, correctIndex} = buildChoicesForKokugo(rng, pool, q);
-      return {label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex};
+    const selected = selectFromPoolNoRepeat(pool, dateStr, grade, "kokugo");
+    const rng = makeRng(dateStr, grade, "kokugo:choices");
+    return selected.map(item=>{
+      const {options, correctIndex} = buildChoicesForKokugo(rng, pool, item);
+      return {label:item.label, prompt:item.prompt, answer:item.answer, options, correctIndex};
     });
   }
   function buildFixedChoiceQuestions(pool, dateStr, subjectKey){
-    const dayIdx = daysSinceEpoch(dateStr);
-    const step = 7;
-    const start = ((dayIdx*step)%pool.length+pool.length)%pool.length;
-    const rotated = pool.slice(start).concat(pool.slice(0,start));
-    const rng = makeRng(dateStr,4,subjectKey);
-    const chosen = shuffle(rng, rotated.slice(0, Math.min(20,pool.length)));
-    while(chosen.length<20){ chosen.push(pick(rng,pool)); }
-    return chosen.slice(0,20).map(q=>{
+    const selected = selectFromPoolNoRepeat(pool, dateStr, 4, subjectKey);
+    const rng = makeRng(dateStr, 4, subjectKey+":choices");
+    return selected.map(q=>{
       const options = shuffle(rng, q.options);
       return {label:q.label, prompt:q.prompt, answer:q.answer, options, correctIndex: options.indexOf(q.answer)};
     });
