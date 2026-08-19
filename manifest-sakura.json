@@ -1,0 +1,14 @@
+{
+  "name": "さくらの せつめい文ドリル",
+  "short_name": "せつめい文",
+  "start_url": "./sakura-setsumeibun-drill.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FBF7EC",
+  "theme_color": "#5B4B8A",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

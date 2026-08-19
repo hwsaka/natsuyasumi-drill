@@ -2,8 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>さくらの せつめい文ドリル</title>
+<link rel="manifest" href="./manifest-sakura.json">
+<meta name="theme-color" content="#5B4B8A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="せつめい文">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -207,6 +215,20 @@
   @media (max-width:560px){
     header h1{font-size:1.6em;}
     .passage-card,.qcard{padding:14px 15px;}
+  }
+
+  /* スマホを横向きにしたとき（高さが低い画面）はヘッダーをコンパクトにする */
+  @media (max-height:480px) and (orientation:landscape){
+    header{padding:8px 0 4px;}
+    header h1{font-size:1.3em;}
+    header .sub{display:none;}
+    .passage-nav{margin:8px 0;}
+    .pbtn{padding:6px 10px;}
+    .passage-card{padding:12px 14px;}
+    .pbody{line-height:1.8;}
+  }
+  @media (max-width:900px) and (orientation:landscape){
+    .wrap{padding-left:24px;padding-right:24px;}
   }
 </style>
 </head>

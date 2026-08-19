@@ -2,8 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>なつやすみ まいにちドリル</title>
+<link rel="manifest" href="./manifest-natsu.json">
+<meta name="theme-color" content="#2C3B4E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="毎日ドリル">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -246,6 +254,21 @@
   @media (max-width:520px){
     .mc-options{margin-left:0;}
     header h1{font-size:1.7em;}
+  }
+
+  /* スマホを横向きにしたとき（高さが低い画面）はヘッダーをコンパクトにする */
+  @media (max-height:480px) and (orientation:landscape){
+    header{padding:8px 0 4px;}
+    header h1{font-size:1.4em;}
+    header .sub{display:none;}
+    .tabs{margin:8px 0;}
+    .tab-btn{padding:6px 12px;font-size:.9em;}
+    .stats{margin-bottom:10px;}
+    .qcard{padding:10px 12px;}
+    footer{margin-top:16px;}
+  }
+  @media (max-width:900px) and (orientation:landscape){
+    .wrap{padding-left:24px;padding-right:24px;}
   }
 </style>
 </head>
